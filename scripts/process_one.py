@@ -14,8 +14,8 @@ param_list = ['run', 'event', 'pedestal_run', 'cmos_integral', 'cmos_mean', 'cmo
               'sc_pearson', 'sc_tgaussamp', 'sc_tgaussmean', 'sc_tgausssigma', 'sc_tchi2',
               'sc_tstatus', 'sc_lgaussamp', 'sc_lgaussmean', 'sc_lgausssigma', 'sc_lchi2', 'sc_lstatus',
               'Lime_pressure', 'Atm_pressure', 'Lime_temperature', 'Atm_temperature', 'Humidity',
-              'Mixture_Density', 'sc_redpixIdx','nRedpix',
-              'redpix_ix','redpix_iy','redpix_iz']
+              'Mixture_Density', 'sc_redpixIdx','nRedpix']#,
+              #'redpix_ix','redpix_iy','redpix_iz']
 
 if len(sys.argv) != 2:
     print("Usage: python process_one.py <run_number>")

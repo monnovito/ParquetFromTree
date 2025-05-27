@@ -17,7 +17,7 @@ param_list = ['run', 'event', 'pedestal_run', 'cmos_integral', 'cmos_mean', 'cmo
               'sc_pearson', 'sc_tgaussamp', 'sc_tgaussmean', 'sc_tgausssigma', 'sc_tchi2',
               'sc_tstatus', 'sc_lgaussamp', 'sc_lgaussmean', 'sc_lgausssigma', 'sc_lchi2', 'sc_lstatus',
               'Lime_pressure', 'Atm_pressure', 'Lime_temperature', 'Atm_temperature', 'Humidity',
-              'Mixture_Density',  'sc_redpixIdx','nRedpix','redpix_ix','redpix_iy','redpix_iz']
+              'Mixture_Density',  'sc_redpixIdx','nRedpix']#,'redpix_ix','redpix_iy','redpix_iz']
 
 def convert_awkward_columns_to_lists(df):
     def safe_convert(val):
@@ -67,6 +67,7 @@ def main(run_number):
 
         df = df.apply(to_numpy_column)
 
+        '''
         new_redpix_ix_all, new_redpix_iy_all, new_redpix_iz_all = [], [], []
         for _, row in df.iterrows():
             markers = np.array(row['sc_redpixIdx'])
@@ -91,10 +92,13 @@ def main(run_number):
         df['new_redpix_iy'] = new_redpix_iy_all
         df['new_redpix_iz'] = new_redpix_iz_all
 
-        redpix_cols = [col for col in df.columns if col.startswith('new_redpix_')]
-        for col in redpix_cols:
-            df[col] = df[col].apply(lambda x: list(x) if isinstance(x, np.ndarray) else x)
-        cols_to_explode = [col for col in df.columns if col.startswith('sc_')] + redpix_cols
+
+        '''
+
+        #redpix_cols = [col for col in df.columns if col.startswith('new_redpix_')]
+        #for col in redpix_cols:
+        #    df[col] = df[col].apply(lambda x: list(x) if isinstance(x, np.ndarray) else x)
+        cols_to_explode = [col for col in df.columns if col.startswith('sc_')] #+ redpix_cols
         exploded_df = df.explode(cols_to_explode)
 
         #Debug print per filtro
@@ -108,9 +112,9 @@ def main(run_number):
 
         
 
-        exploded_df = exploded_df[exploded_df['new_redpix_ix'].apply(lambda x: isinstance(x, (list, np.ndarray)) and len(x) > 0)] #exploded_df = exploded_df[exploded_df['new_redpix_ix'].apply(lambda x: len(x) > 0)]
+        #exploded_df = exploded_df[exploded_df['new_redpix_ix'].apply(lambda x: isinstance(x, (list, np.ndarray)) and len(x) > 0)] #exploded_df = exploded_df[exploded_df['new_redpix_ix'].apply(lambda x: len(x) > 0)]
         exploded_df = exploded_df.reset_index(drop=True)
-        exploded_df = exploded_df.drop(columns=['redpix_ix', 'redpix_iy', 'redpix_iz'])
+        #exploded_df = exploded_df.drop(columns=['redpix_ix', 'redpix_iy', 'redpix_iz'])
 
 
         exploded_df['sc_ymean'] = pd.to_numeric(exploded_df['sc_ymean'], errors='raise')
